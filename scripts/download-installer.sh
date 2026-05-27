@@ -21,6 +21,8 @@ resolve_api_url() {
     fi
     tmp=$(mktemp)
     if curl -fsSL "$PAGE_URL" -H "User-Agent: $UA" -o "$tmp" 2>/dev/null; then
+        url=""
+        if command -v python3 >/dev/null 2>&1; then
         url=$(python3 - "$tmp" <<'PY'
 import re, sys
 html = open(sys.argv[1], errors="replace").read()
@@ -32,6 +34,19 @@ for m in pat.finditer(html):
         break
 PY
 )
+        elif command -v python >/dev/null 2>&1; then
+        url=$(python - "$tmp" <<'PY'
+import re, sys
+html = open(sys.argv[1], errors="replace").read()
+pat = re.compile(r'https://images\.hillstonenet\.com/api/Sslvpn/download\?id=\d+&cid=\d+')
+for m in pat.finditer(html):
+    ctx = html[max(0, m.start() - 600): m.end() + 100]
+    if "software_disclaimer_linux" in ctx:
+        print(m.group())
+        break
+PY
+)
+        fi
         rm -f "$tmp"
         if [ -n "$url" ]; then
             printf '%s\n' "$url"

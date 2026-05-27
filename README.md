@@ -11,13 +11,11 @@
 | `pgrep` 找不到进程 | 用完整路径匹配（comm 仅 15 字符） |
 | Qt `xcb` / 库冲突 | 启动器设置 `LD_LIBRARY_PATH` / `QT_PLUGIN_PATH` |
 
-> **说明**：安装包需从[山石官网](https://www.hillstonenet.com.cn/support-and-training/hillstone-secure-connect/)自行下载（受版权与登录限制，本仓库不包含 `.run` 文件）。
+> **说明**：本仓库不含官方 `.run`；`install.sh` 会自动 **wget** 下载，也可手动下载。
 
 ## 一键安装
 
-**1.** 下载官方 `HillstoneSecureConnect_*.run` 到 `~/下载` 或 `~/Downloads`
-
-**2.** 执行（将 `meetorion` 换成你的 GitHub 用户名）：
+**方式 A（自动下载 + 安装）**
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/meetorion/hillstone-arch/main/install.sh | bash
@@ -36,6 +34,28 @@ git clone https://github.com/meetorion/hillstone-arch.git
 cd hillstone-arch
 ./install.sh ~/下载/HillstoneSecureConnect_*.run
 ```
+
+## 仅用 wget 下载 Linux 安装包
+
+官网按钮对应 API（非页面直链），需带 `Referer` 与浏览器 `User-Agent`：
+
+```bash
+wget -c -O ~/下载/HillstoneSecureConnect.run \
+  'https://images.hillstonenet.com/api/Sslvpn/download?id=96252&cid=4379' \
+  --user-agent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36' \
+  --referer='https://www.hillstonenet.com.cn/support-and-training/hillstone-secure-connect/'
+```
+
+校验 MD5（官网 Linux 5.7.1.12488）：`a3de7aeefb19b3997b2e4da8fa7490f7`
+
+或使用仓库脚本（会从下载页自动解析 API，失败则用默认 id/cid）：
+
+```bash
+git clone https://github.com/meetorion/hillstone-arch.git
+./hillstone-arch/scripts/download-installer.sh ~/下载/HillstoneSecureConnect.run
+```
+
+版本更新后 `id`/`cid` 可能变化，以[下载页](https://www.hillstonenet.com.cn/support-and-training/hillstone-secure-connect/) HTML 中 `software_disclaimer_linux` 旁的链接为准。
 
 ## 使用
 

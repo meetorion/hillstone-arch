@@ -68,6 +68,8 @@ install_deps() {
     fi
     sudo pacman -Sy --needed --noconfirm \
         git \
+        wget \
+        curl \
         libxcb \
         libxkbcommon-x11 \
         xcb-util-cursor \
@@ -75,7 +77,7 @@ install_deps() {
         systemd \
         iproute2 \
         2>/dev/null || sudo pacman -Sy --needed \
-        git libxcb libxkbcommon-x11 xcb-util-cursor icu systemd iproute2
+        git wget curl libxcb libxkbcommon-x11 xcb-util-cursor icu systemd iproute2
 }
 
 install_scripts() {
@@ -97,15 +99,25 @@ find_installer() {
     fi
     # shellcheck source=/dev/null
     . "$REPO_DIR/scripts/common.sh"
-    hillstone_find_installer || return 1
+    if hillstone_find_installer; then
+        return
+    fi
+    if [ "${HILLSTONE_SKIP_DOWNLOAD:-0}" != 1 ]; then
+        local dest="${HILLSTONE_INSTALLER_CACHE:-$HOME/下载/HillstoneSecureConnect_linux.run}"
+        log "未找到本地安装包，尝试 wget/curl 从官网下载..."
+        bash "$REPO_DIR/scripts/download-installer.sh" "$dest"
+        printf '%s\n' "$dest"
+        return
+    fi
+    return 1
 }
 
 run_official_installer() {
     local installer
-    installer=$(find_installer) || die "未找到安装包。请:
-  1. 从官网下载 Linux .run 安装包
-     https://www.hillstonenet.com.cn/support-and-training/hillstone-secure-connect/
-  2. 重新运行: ./install.sh ~/下载/HillstoneSecureConnect_*.run"
+    installer=$(find_installer) || die "未找到安装包且自动下载失败。可手动:
+  bash scripts/download-installer.sh ~/下载/HillstoneSecureConnect.run
+  ./install.sh ~/下载/HillstoneSecureConnect_*.run
+  官网: https://www.hillstonenet.com.cn/support-and-training/hillstone-secure-connect/"
 
     log "使用安装包: $installer"
     bash "$REPO_DIR/scripts/install-gui.sh" "$installer"

@@ -1,0 +1,8 @@
+#!/bin/sh
+SHARE="${HILLSTONE_SC_SHARE:-/usr/share/hillstone-secure-connect-arch}"
+if [ -f "$SHARE/scripts/fix-vnic.sh" ]; then
+    exec "$SHARE/scripts/fix-vnic.sh" "$@"
+fi
+# 仓库内开发/本地运行
+ROOT=$(CDPATH= cd "$(dirname "$0")/.." && pwd)
+exec "$ROOT/scripts/fix-vnic.sh" "$@"

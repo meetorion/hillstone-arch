@@ -1,0 +1,48 @@
+#!/bin/sh
+# Hillstone Secure Connect 启动器（Arch/Garuda 适配）
+set -eu
+
+HILLSTONE_OPT=/opt/HillstoneSecureConnect
+HILLSTONE_SVC="$HILLSTONE_OPT/bin/HillstoneSecureConnectService"
+HILLSTONE_GUI="$HILLSTONE_OPT/bin/HillstoneSecureConnect"
+
+if ! pgrep -f "$HILLSTONE_SVC" >/dev/null 2>&1; then
+    if command -v systemctl >/dev/null 2>&1 \
+        && systemctl is-enabled HillstoneSecureConnect.service >/dev/null 2>&1; then
+        echo "hillstone-secure-connect: 正在启动后台服务..." >&2
+        systemctl start HillstoneSecureConnect.service 2>/dev/null || true
+        sleep 1
+    fi
+    if ! pgrep -f "$HILLSTONE_SVC" >/dev/null 2>&1; then
+        echo "hillstone-secure-connect: 后台服务未运行，虚拟网卡会失败。" >&2
+        echo "  请执行: sudo hillstone-fix-vnic" >&2
+    fi
+fi
+
+for ROOT in "$HILLSTONE_OPT" "$HOME/.local/opt/HillstoneSecureConnect"; do
+    BIN="$ROOT/bin/HillstoneSecureConnect"
+    LIB="$ROOT/lib"
+    if [ -x "$BIN" ] && [ -f "$LIB/libQt5Core.so.5" ]; then
+        unset LD_LIBRARY_PATH
+        export LD_LIBRARY_PATH="$LIB"
+        if [ -d "$ROOT/plugins" ]; then
+            export QT_PLUGIN_PATH="$ROOT/plugins"
+            export QT_QPA_PLATFORM_PLUGIN_PATH="$ROOT/plugins/platforms"
+        fi
+        if [ "${XDG_SESSION_TYPE:-}" = 'wayland' ] && [ -z "${QT_QPA_PLATFORM:-}" ]; then
+            export QT_QPA_PLATFORM=xcb
+        fi
+        cd "$ROOT/bin"
+        exec ./HillstoneSecureConnect "$@"
+    fi
+done
+
+cat >&2 <<'EOF'
+hillstone-secure-connect: 未找到完整安装。
+
+请先安装:
+  curl -fsSL https://raw.githubusercontent.com/YOUR_USER/hillstone-secure-connect-arch/main/install.sh | bash
+
+或本地: ./install.sh /path/to/HillstoneSecureConnect_*.run
+EOF
+exit 1

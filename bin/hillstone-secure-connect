@@ -41,7 +41,7 @@ cat >&2 <<'EOF'
 hillstone-secure-connect: 未找到完整安装。
 
 请先安装:
-  curl -fsSL https://raw.githubusercontent.com/YOUR_USER/hillstone-secure-connect-arch/main/install.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/meetorion/hillstone-arch/main/install.sh | bash
 
 或本地: ./install.sh /path/to/HillstoneSecureConnect_*.run
 EOF

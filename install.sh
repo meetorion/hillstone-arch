@@ -6,9 +6,9 @@
 #   curl -fsSL ... | bash -s -- /path/to/HillstoneSecureConnect_*.run
 set -euo pipefail
 
-REPO_URL="${HILLSTONE_SC_REPO:-https://github.com/YOUR_USER/hillstone-secure-connect-arch.git}"
+REPO_URL="${HILLSTONE_SC_REPO:-https://github.com/meetorion/hillstone-arch.git}"
 BRANCH="${HILLSTONE_SC_BRANCH:-main}"
-SHARE="${HILLSTONE_SC_SHARE:-/usr/share/hillstone-secure-connect-arch}"
+SHARE="${HILLSTONE_SC_SHARE:-/usr/share/hillstone-arch}"
 BINDIR="${HILLSTONE_SC_BINDIR:-/usr/local/bin}"
 INSTALLER_ARG="${1:-}"
 
@@ -39,7 +39,7 @@ resolve_repo_dir() {
     if command -v git >/dev/null 2>&1; then
         git clone --depth 1 -b "$BRANCH" "$REPO_URL" "$tmp"
     else
-        die "需要 git。请: git clone $REPO_URL && cd hillstone-secure-connect-arch && ./install.sh"
+        die "需要 git。请: git clone $REPO_URL && cd hillstone-arch && ./install.sh"
     fi
     HILLSTONE_SC_REPO_DIR=$tmp
     trap - EXIT

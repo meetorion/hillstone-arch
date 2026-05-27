@@ -17,23 +17,23 @@
 
 **1.** 下载官方 `HillstoneSecureConnect_*.run` 到 `~/下载` 或 `~/Downloads`
 
-**2.** 执行（将 `YOUR_USER` 换成你的 GitHub 用户名）：
+**2.** 执行（将 `meetorion` 换成你的 GitHub 用户名）：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USER/hillstone-secure-connect-arch/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/meetorion/hillstone-arch/main/install.sh | bash
 ```
 
 若安装包不在默认路径，指定文件：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USER/hillstone-secure-connect-arch/main/install.sh | bash -s -- "$HOME/下载/HillstoneSecureConnect_5.7.1.12488_c5c25286.run"
+curl -fsSL https://raw.githubusercontent.com/meetorion/hillstone-arch/main/install.sh | bash -s -- "$HOME/下载/HillstoneSecureConnect_5.7.1.12488_c5c25286.run"
 ```
 
 或克隆后本地安装：
 
 ```bash
-git clone https://github.com/YOUR_USER/hillstone-secure-connect-arch.git
-cd hillstone-secure-connect-arch
+git clone https://github.com/meetorion/hillstone-arch.git
+cd hillstone-arch
 ./install.sh ~/下载/HillstoneSecureConnect_*.run
 ```
 
@@ -53,7 +53,7 @@ systemctl status HillstoneSecureConnect.service
 |------|------|
 | `HILLSTONE_SC_REPO` | 脚本仓库 Git URL（curl 管道安装时） |
 | `HILLSTONE_SC_REPO_DIR` | 本地仓库路径 |
-| `HILLSTONE_SC_SHARE` | 安装到系统的 share 目录，默认 `/usr/share/hillstone-secure-connect-arch` |
+| `HILLSTONE_SC_SHARE` | 安装到系统的 share 目录，默认 `/usr/share/hillstone-arch` |
 
 ## 故障排查
 
@@ -81,7 +81,7 @@ sudo systemctl disable --now HillstoneSecureConnect.service
 sudo rm -f /etc/systemd/system/HillstoneSecureConnect.service
 sudo systemctl daemon-reload
 sudo rm -rf /opt/HillstoneSecureConnect
-sudo rm -rf /usr/share/hillstone-secure-connect-arch
+sudo rm -rf /usr/share/hillstone-arch
 sudo rm -f /usr/local/bin/hillstone-secure-connect /usr/local/bin/hillstone-fix-vnic
 sudo rm -f /usr/share/applications/hillstone-secure-connect.desktop
 ```

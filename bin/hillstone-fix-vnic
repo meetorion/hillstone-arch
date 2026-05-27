@@ -1,5 +1,5 @@
 #!/bin/sh
-SHARE="${HILLSTONE_SC_SHARE:-/usr/share/hillstone-secure-connect-arch}"
+SHARE="${HILLSTONE_SC_SHARE:-/usr/share/hillstone-arch}"
 if [ -f "$SHARE/scripts/fix-vnic.sh" ]; then
     exec "$SHARE/scripts/fix-vnic.sh" "$@"
 fi

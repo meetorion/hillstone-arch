@@ -2,7 +2,7 @@
 # Hillstone Secure Connect — Arch / Garuda 一键安装
 # 用法:
 #   ./install.sh [官方安装包.run]
-#   curl -fsSL https://raw.githubusercontent.com/YOUR_USER/hillstone-secure-connect-arch/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/meetorion/hillstone-arch/main/install.sh | bash
 #   curl -fsSL ... | bash -s -- /path/to/HillstoneSecureConnect_*.run
 set -euo pipefail
 
